@@ -38,8 +38,9 @@ public class HospedeDao {
                 hospede.setRG(result.getString("rg"));
                 hospede.setNascimento(result.getString("nascimento"));
                 // user é atribuido por uma busca na classe userDAO
-                con.close();
+                guests.add(hospede);
             }
+            con.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.getMessage();
             e.printStackTrace();

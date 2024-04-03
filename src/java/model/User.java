@@ -11,7 +11,7 @@ package model;
 public class User {
     private String senha;
     private String email;
-    private boolean root;
+    private byte root =0;
 
     public String getSenha() {
         return senha;
@@ -29,11 +29,11 @@ public class User {
         this.email = email;
     }
 
-    public boolean isRoot() {
+    public byte isRoot() {
         return root;
     }
 
-    public void setRoot(boolean root) {
+    public void setRoot(byte root) {
         this.root = root;
     }
     

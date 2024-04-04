@@ -11,6 +11,7 @@ package model;
 public class User {
     private String senha;
     private String email;
+    private Hospede hospede;
     private byte root =0;
 
     public String getSenha() {
@@ -29,6 +30,14 @@ public class User {
         this.email = email;
     }
 
+    public Hospede getHospede() {
+        return hospede;
+    }
+
+    public void setHospede(Hospede hospede) {
+        this.hospede = hospede;
+    }
+   
     public byte isRoot() {
         return root;
     }

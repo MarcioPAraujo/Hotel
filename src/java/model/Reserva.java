@@ -9,7 +9,7 @@ package model;
  * @author alunos
  */
 public class Reserva {
-    private int id;
+    private long id;
     private Hospede hospede;
     private String diaDaReserva ;
     private String expiracao;
@@ -20,11 +20,11 @@ public class Reserva {
     private double despesasTotais;
     private Quarto quarto;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

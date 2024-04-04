@@ -21,8 +21,8 @@ public class HospedeDao {
     private static final String getAllHotelguests ="select * from hospede";
     private static final String deleteHotelGuest= "delete from hospede where id = ?";
     private static final String getHotelGuest ="select * from hospede where id = ?";
-    private static final String updateHotelGuest = "update hospede set nome = ?, rg = ?, usuario = ? where id = ?";
-    private static final String insertHotelGuest = "insert into hospede(nome,cpf,rg,nascimento,usuario) values (?,?,?,?)";
+    private static final String updateHotelGuest = "update hospede set nome = ?, rg = ? where id = ?";
+    private static final String insertHotelGuest = "insert into hospede(nome,cpf,rg,nascimento) values (?,?,?)";
     
     public ArrayList<Hospede> getAllGuests(){
         ArrayList<Hospede> guests = new ArrayList<Hospede>();
@@ -37,7 +37,7 @@ public class HospedeDao {
                 hospede.setCPF(result.getString("cpf"));
                 hospede.setRG(result.getString("rg"));
                 hospede.setNascimento(result.getString("nascimento"));
-                // user é atribuido por uma busca na classe userDAO
+                
                 guests.add(hospede);
             }
             con.close();
@@ -48,7 +48,7 @@ public class HospedeDao {
         return guests;
     }
     public void deleteHospede(Hospede hospede){
-        // apos deletar hospede usuário deve ser também deletado
+        
         try {
              Connection con = FabricaConexao.getConexao();
             PreparedStatement statement = con.prepareStatement(deleteHotelGuest);
@@ -72,7 +72,7 @@ public class HospedeDao {
                 hospede.setRG(result.getString("rg"));
                 hospede.setNascimento(result.getString("nascimento"));
                 hospede.setNome(result.getString("nome"));
-                // se preciso fazer a busca no user
+                
             }
         con.close();
         } catch (ClassNotFoundException | SQLException e) {
@@ -89,7 +89,7 @@ public class HospedeDao {
         statement.setString(2, hospede.getCPF());
         statement.setString(3, hospede.getRG());
         statement.setString(4,  hospede.getNascimento());
-        statement.setString(5, hospede.getUser().getEmail());
+        
         
         statement.execute();
         con.close();
@@ -104,7 +104,8 @@ public class HospedeDao {
         PreparedStatement statement = con.prepareStatement(updateHotelGuest);
         statement.setString(1, hospede.getNome());
         statement.setString(2, hospede.getRG());
-        statement.setString(3, hospede.getUser().getEmail());
+        statement.setInt(3,hospede.getId());
+        
         
         statement.execute();
         con.close();

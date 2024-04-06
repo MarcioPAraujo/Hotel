@@ -39,13 +39,13 @@ create table reserva(
     dia_da_reserva date,
     expiracao date,
     dias_reservados int,
-    diaria numeric(6,2),
-    despesas_totais numeric(7,2),
+    diaria decimal(6,2),
+    despesas_totais decimal(7,2),
     servicos_adicionais bit,
     hospede int,
     agencia int,
     quarto int,
-    constraint fk_hospede_id foreign key (hospede) references hospede (id),
+    constraint fk_hospede foreign key (hospede) references hospede (id),
     constraint fk_agencia_id foreign key (agencia) references agencia (id),
     constraint fk_quarto_num foreign key (quarto) references quarto (numero)
 );
@@ -61,9 +61,9 @@ create table historico(
     hospede int,
     agencia int,
     quarto int,
-    constraint fk_hospede_id foreign key (hospede) references hospede (id),
-    constraint fk_agencia_id foreign key (agencia) references agencia (id),
-    constraint fk_quarto_num foreign key (quarto) references quarto (numero)
+    constraint fk_hospede_key foreign key (hospede) references hospede (id),
+    constraint fk_agencia_key foreign key (agencia) references agencia (id),
+    constraint fk_quarto_key foreign key (quarto) references quarto (numero)
 );
 
 

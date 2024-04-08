@@ -7,6 +7,7 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import model.Agencia;
 import model.Hospede;
 import model.Quarto;
@@ -60,4 +61,63 @@ public class ReservaDAO {
         
         return reserva;
     }
+    
+    public void insertNewReserva(Reserva reserva){
+        try{
+        Connection con = FabricaConexao.getConexao();
+        PreparedStatement statement = con.prepareStatement(NEW_RESERVA);
+        statement.setString(1, reserva.getDiaDaReserva());
+        statement.setString(2, reserva.getExpiracao());
+        statement.setInt(3,reserva.getDiasReservados());
+        statement.setDouble(4, reserva.getDiaria());
+        statement.setDouble(5,reserva.getDespesasTotais());
+        statement.setByte(6,reserva.getServicosAdicionais());
+        statement.setInt(7, reserva.getHospede().getId());
+        statement.setInt(8,reserva.getAgencia().getId());
+        statement.setInt(9,reserva.getQuarto().getNumero());
+        
+        
+        
+        statement.execute();
+        con.close();
+        }catch(ClassNotFoundException | SQLException e){
+             e.getMessage();
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateReserva(Reserva reserva){
+        try{
+        Connection con = FabricaConexao.getConexao();
+        PreparedStatement statement = con.prepareStatement(UPDATE_RESERVA);
+        statement.setString(1, reserva.getDiaDaReserva());
+        statement.setString(2, reserva.getExpiracao());
+        statement.setInt(3,reserva.getDiasReservados());
+        statement.setByte(4,reserva.getServicosAdicionais());
+        statement.setDouble(5,reserva.getDespesasTotais());
+        statement.setInt(6,reserva.getQuarto().getNumero());
+        statement.setInt(7, reserva.getHospede().getId());
+        
+        
+        statement.execute();
+        con.close();
+        }catch(ClassNotFoundException | SQLException e){
+             e.getMessage();
+            e.printStackTrace();
+        }
+        
+    }
+    public void deleteReserva(Reserva reserva){
+        
+            try {
+                 Connection con = FabricaConexao.getConexao();
+                PreparedStatement statement = con.prepareStatement(DELETE_RESERVA);
+                statement.setLong(1,reserva.getId());
+                statement.execute();
+            } catch (ClassNotFoundException | SQLException e) {
+                e.getMessage();
+                e.printStackTrace();
+            }
+       
+        }
 }

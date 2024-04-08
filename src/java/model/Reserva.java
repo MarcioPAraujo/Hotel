@@ -60,7 +60,7 @@ public class Reserva {
         this.diasReservados = diasReservados;
     }
 
-    public byte isServicosAdicionais() {
+    public byte getServicosAdicionais() {
         return servicosAdicionais;
     }
 

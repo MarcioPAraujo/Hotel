@@ -7,6 +7,7 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import model.Agencia;
 import model.Hospede;
 import model.Quarto;
@@ -55,5 +56,29 @@ public class HistoricoDAO {
         
         
         return reserva;
+    }
+    
+    public void insertNewReserva(Reserva reserva){
+        try{
+        Connection con = FabricaConexao.getConexao();
+        PreparedStatement statement = con.prepareStatement(ADD_TO_HISTORICO);
+        statement.setString(1, reserva.getDiaDaReserva());
+        statement.setString(2, reserva.getExpiracao());
+        statement.setInt(3,reserva.getDiasReservados());
+        statement.setDouble(4, reserva.getDiaria());
+        statement.setDouble(5,reserva.getDespesasTotais());
+        statement.setByte(6,reserva.getServicosAdicionais());
+        statement.setInt(7, reserva.getHospede().getId());
+        statement.setInt(8,reserva.getAgencia().getId());
+        statement.setInt(9,reserva.getQuarto().getNumero());
+        
+        
+        
+        statement.execute();
+        con.close();
+        }catch(ClassNotFoundException | SQLException e){
+             e.getMessage();
+            e.printStackTrace();
+        }
     }
 }

@@ -35,7 +35,7 @@ public class UserDAO {
             
             while(result.next()){
                 
-                user.setRoot(result.getByte("root"));
+                
                 user.setSenha(result.getString("senha"));
                 user.setRoot(result.getByte("root"));
                 hospede.setId(result.getInt("hospede"));

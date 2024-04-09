@@ -12,7 +12,6 @@ import java.util.Date;
  */
 public class Hospede {
     private int id;
-    private User user;
     private String nome;
     private String CPF;
     private String RG;
@@ -24,14 +23,6 @@ public class Hospede {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getNome() {

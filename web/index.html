@@ -10,7 +10,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+        <main>
+            <form action="Login">
+                <div>
+                    <label for="Imail">Email</label>
+                    <input name="mail" type="email" id="Imail" required>
+                </div>
+                <div>
+                    <label for="Isenha">Senha</label>
+                    <input name="senha" type="password" id="Isenha" required>
+                </div>
+                <div>
+                    <input type="submit" value="login" id="loginButton">
+                </div>
+            </form>
+            <button><a href="PrimeiroAcesso.html">Primeiro Acesso</a></button>
+        </main>
         
     </body>
 </html>

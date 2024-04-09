@@ -4,6 +4,8 @@
  */
 package controller;
 
+import DAO.HospedeDao;
+import DAO.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import model.User;
 /*
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author mariailsa
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Home extends HttpServlet {
+public class Login extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,6 +43,39 @@ public class Home extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            
+            // encapsular regra de negócio
+            String message = "";
+            User user = new User();
+            UserDAO udao = new UserDAO();
+            user.setEmail(request.getParameter("mail"));
+            user.setSenha(request.getParameter("senha"));
+            
+            User userFromDataBase = new User();
+            userFromDataBase = udao.getUser(user);
+            
+            boolean userNonexistent = userFromDataBase == null;
+            if(userNonexistent){
+                message = "dados inválidos";
+                request.setAttribute("message", message);
+            }else{
+                boolean emailValido = userFromDataBase.getEmail().equals(user.getEmail());
+                boolean senhaValida = userFromDataBase.getSenha().equals(user.getSenha());
+                if(emailValido && senhaValida){
+                    //chamar a página home passando hospede
+                    HospedeDao hdao = new HospedeDao();
+                    user.setHospede(hdao.getHospede(user.getHospede()));
+                    request.setAttribute("user", user);
+                    request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
+                }
+                else{
+                    message = "dados inválidos";
+                    request.setAttribute("message", message);
+                }
+                
+                
+            }
+           
             
         }
     }

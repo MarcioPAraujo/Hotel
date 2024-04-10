@@ -22,7 +22,8 @@ public class HospedeDao {
     private static final String deleteHotelGuest= "delete from hospede where id = ?";
     private static final String getHotelGuest ="select * from hospede where id = ?";
     private static final String updateHotelGuest = "update hospede set nome = ?, rg = ? where id = ?";
-    private static final String insertHotelGuest = "insert into hospede(nome,cpf,rg,nascimento) values (?,?,?)";
+    private static final String insertHotelGuest = "insert into hospede(nome,cpf,rg,nascimento) values (?,?,?,?)";
+    private static final String getHotelGuestID = "select * from hospede where cpf = ?";
     
     public ArrayList<Hospede> getAllGuests(){
         ArrayList<Hospede> guests = new ArrayList<Hospede>();
@@ -59,6 +60,27 @@ public class HospedeDao {
             e.printStackTrace();
         }
        
+    }
+    public Hospede getHospedeID(Hospede hospede){
+        try {
+            Connection con = FabricaConexao.getConexao();
+            PreparedStatement statement = con.prepareStatement(getHotelGuestID);
+            statement.setString(1, hospede.getCPF());
+            ResultSet result = statement.executeQuery();
+            if(result.next()){
+                hospede.setId(result.getInt("id"));
+                hospede.setCPF(result.getString("cpf"));
+                hospede.setRG(result.getString("rg"));
+                hospede.setNascimento(result.getString("nascimento"));
+                hospede.setNome(result.getString("nome"));
+                
+            }
+        con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.getMessage();
+            e.printStackTrace();
+        }
+        return hospede;
     }
     public Hospede getHospede(Hospede hospede){
         // id vem settado no parâmetro
@@ -97,6 +119,7 @@ public class HospedeDao {
              e.getMessage();
             e.printStackTrace();
         }
+        
     }
     public void updateHospede(Hospede hospede){
         try{

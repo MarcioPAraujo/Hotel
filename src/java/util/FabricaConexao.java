@@ -18,9 +18,9 @@ public class FabricaConexao {
 
     public static Connection getConexao() throws ClassNotFoundException, SQLException {
         String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/dbcliente";
+        String url = "jdbc:mysql://localhost:3306/banco_hotel";
         String user = "root";
-        String pass = "";//magicword_do
+        String pass = "magicword_do";//magicword_do
         Class.forName(driver);
         conexao = DriverManager.getConnection(url, user, pass);
         return conexao;

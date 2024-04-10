@@ -53,11 +53,14 @@ public class PrimeiroAcesso extends HttpServlet {
             
             user.setEmail(request.getParameter("mail"));
             user.setSenha(request.getParameter("senha"));
-            user.setHospede(hospede);
+            
             
             HospedeDao hdao = new HospedeDao();
             hdao.insertNewHospede(hospede);
             
+            hospede = hdao.getHospedeID(hospede);
+            // settar a chave estrangeriea de hospede antes de fazer insert no usuario;
+            user.setHospede(hospede);
             UserDAO udao = new UserDAO();
             udao.insertNewUser(user);
             

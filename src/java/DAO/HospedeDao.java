@@ -84,16 +84,18 @@ public class HospedeDao {
     }
     public Hospede getHospede(Hospede hospede){
         // id vem settado no parâmetro
+        Hospede h = new Hospede();
         try {
             Connection con = FabricaConexao.getConexao();
             PreparedStatement statement = con.prepareStatement(getHotelGuest);
             statement.setInt(1, hospede.getId());
             ResultSet result = statement.executeQuery();
             if(result.next()){
-                hospede.setCPF(result.getString("cpf"));
-                hospede.setRG(result.getString("rg"));
-                hospede.setNascimento(result.getString("nascimento"));
-                hospede.setNome(result.getString("nome"));
+                h.setId(result.getInt("id"));
+                h.setCPF(result.getString("cpf"));
+                h.setRG(result.getString("rg"));
+                h.setNascimento(result.getString("nascimento"));
+                h.setNome(result.getString("nome"));
                 
             }
         con.close();
@@ -101,7 +103,7 @@ public class HospedeDao {
             e.getMessage();
             e.printStackTrace();
         }
-        return hospede;
+        return h;
     }
     public void insertNewHospede(Hospede hospede){
         try{

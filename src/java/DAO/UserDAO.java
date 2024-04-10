@@ -27,6 +27,7 @@ public class UserDAO {
         /* log in, se bem sucedido deve retornar um objeto user preenchido, exceto pelo hospede,
         que será preenchido na classe controller*/
         Hospede hospede = new Hospede();
+        User userFromDataBase = new User();
         try {
             Connection con = FabricaConexao.getConexao();
             PreparedStatement statement = con.prepareStatement(GET_USER);
@@ -35,18 +36,18 @@ public class UserDAO {
             
             while(result.next()){
                 
-                
-                user.setSenha(result.getString("senha"));
-                user.setRoot(result.getByte("root"));
+                userFromDataBase.setEmail(result.getString("email"));
+                userFromDataBase.setSenha(result.getString("senha"));
+                userFromDataBase.setRoot(result.getByte("root"));
                 hospede.setId(result.getInt("hospede"));
             }
-            user.setHospede(hospede);
+            userFromDataBase.setHospede(hospede);
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.getMessage();
             e.printStackTrace();
         }
-        return user;
+        return userFromDataBase;
     }
     
     public void insertNewUser( User user){

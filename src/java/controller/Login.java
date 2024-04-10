@@ -53,31 +53,40 @@ public class Login extends HttpServlet {
             
             User userFromDataBase = new User();
             userFromDataBase = udao.getUser(user);
+            System.out.println(userFromDataBase.getEmail());
+            System.out.println(user.getEmail());
             
-            boolean userNonexistent = userFromDataBase == null;
-            if(userNonexistent){
-                message = "dados inválidos";
-                request.setAttribute("message", message);
-            }else{
-                boolean emailValido = userFromDataBase.getEmail().equals(user.getEmail());
-                boolean senhaValida = userFromDataBase.getSenha().equals(user.getSenha());
-                if(emailValido && senhaValida){
-                    //chamar a página home passando hospede
-                    HospedeDao hdao = new HospedeDao();
-                    user.setHospede(hdao.getHospede(user.getHospede()));
-                    request.setAttribute("user", user);
-                    request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
-                }
-                else{
-                    message = "dados inválidos";
-                    request.setAttribute("message", message);
-                }
-                
-                
-            }
            
             
+           
+            
+            if(userFromDataBase.getEmail() == null){
+                message = "dados inválidos";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
+            }else {
+                
+                boolean senhaValida = userFromDataBase.getSenha() == user.getSenha();
+                
+                if(senhaValida){
+                
+                //chamar a página home passando hospede
+                /*HospedeDao hdao = new HospedeDao();
+                user.setHospede(hdao.getHospede(userFromDataBase.getHospede()));
+                */
+                request.setAttribute("user", userFromDataBase);
+                request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
+                }
+                message = "dados inválidos";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
+            }
+                
+                
         }
+           
+            
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -118,5 +127,5 @@ public class Login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
+

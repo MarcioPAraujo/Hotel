@@ -4,7 +4,6 @@
  */
 package controller;
 
-import DAO.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import model.User;
 /*
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author mariailsa
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "tabs", urlPatterns = {"/tabs"})
+public class MenuHome extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,42 +40,18 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
-            // encapsular regra de negócio
-            String message = "";
-            User user = new User();
-            UserDAO udao = new UserDAO();
-            user.setEmail(request.getParameter("mail"));
-            user.setSenha(request.getParameter("senha"));
-            
-            User userFromDataBase = new User();
-            userFromDataBase = udao.getUser(user);
-            
-            if(userFromDataBase.getEmail() == null){
-                message = "dados inválidos";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
-            }else {
+            String tab = request.getParameter("menu");
+            if(tab.equals("reservas")){
                 
-                boolean senhaValida = userFromDataBase.getSenha().equals(user.getSenha());
-                
-                if(senhaValida){
-                //chamar a página home passando hospede
-                request.setAttribute("user", userFromDataBase);
-                request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
-                }
-                else{
-                message = "dados inválidos";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
-                }
             }
+            if(tab.equals("historico")){
                 
-                
-        }
-           
-            
+            }
+            if(tab.equals("perfil")){
+                request.getRequestDispatcher("PaginasDinamicas/Perfil.jsp").forward(request, response);
+            }
         
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -118,5 +92,5 @@ public class Login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-}
 
+}

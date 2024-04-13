@@ -16,7 +16,7 @@ public class Reserva {
     private int diasReservados;
     private byte servicosAdicionais = 0;
     private double diaria;
-    private Agencia agencia;//opcional
+    private Agencia agencia;
     private double despesasTotais;
     private Quarto quarto;
 

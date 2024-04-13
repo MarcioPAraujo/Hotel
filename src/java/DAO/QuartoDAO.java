@@ -16,7 +16,7 @@ import util.FabricaConexao;
  *
  * @author mariailsa
  */
-public class QuartoDao {
+public class QuartoDAO {
     private static final String GET_ALL_ROOMS = "select * from quarto";
     private static final String GET_AN_ROOM = "select * from quarto where numero = ?";
     private static final String UPDATE_ROOM = "update quarto set disponivel = ? where numero = ?";

@@ -22,11 +22,9 @@ public class ReservaDAO {
     private static final String GET_RESERVA = "select * from reserva where hospede = ?";
     // pegando a reserva pelo id do hospede, assim listará a reserva daquele hospede especifico
     private static final String UPDATE_RESERVA = "update reserva "
-                                               + "set dia_da_reserva = ?, expiracao = ?, dias_reservados = ?, servicos_adicionais = ?, despesas_totais = ?, quarto = ?"
+                                               + "set dia_da_reserva = ?, expiracao = ?, servicos_adicionais = ?, despesas_totais = ?, quarto = ?"
                                                + " where hospede = ?";
-    private static final String NEW_RESERVA = "insert into reserva "
-                                               + "(dia_da_reserva, expiracao, dias_reservados, diaria, despesas_totais, servicos_adicionais, hospede, agencia, quarto) "
-                                               + "values(?,?,?,?,?,?,?,?,?,)";
+    private static final String NEW_RESERVA = "insert into reserva (dia_da_reserva, expiracao, dias_reservados, diaria, despesas_totais, servicos_adicionais, hospede, agencia, quarto) values(?,?,?,?,?,?,?,?,?)";
     
     private static final String DELETE_RESERVA = "delete from reserva where id = ?";
     // será usado quando a reserva expirar ou o hospede quiser cancela-la
@@ -45,6 +43,7 @@ public class ReservaDAO {
               reserva.setDiaDaReserva(result.getString("dia_da_reserva"));
               reserva.setExpiracao(result.getString("expiracao"));
               reserva.setDiasReservados(result.getInt("dias_reservados"));
+              reserva.setDiaria(result.getDouble("diaria"));
               reserva.setServicosAdicionais(result.getByte("servicos_adicionais"));
               reserva.setDespesasTotais(result.getDouble("despesas_totais"));
               numeroDoQuarto.setNumero(result.getInt("quarto"));
@@ -54,6 +53,7 @@ public class ReservaDAO {
             }
             reserva.setQuarto(numeroDoQuarto);
             reserva.setAgencia(agencia);
+            reserva.setHospede(hospede);
         con.close();
         } catch (Exception e) {
         }
@@ -66,6 +66,7 @@ public class ReservaDAO {
         try{
         Connection con = FabricaConexao.getConexao();
         PreparedStatement statement = con.prepareStatement(NEW_RESERVA);
+        
         statement.setString(1, reserva.getDiaDaReserva());
         statement.setString(2, reserva.getExpiracao());
         statement.setInt(3,reserva.getDiasReservados());
@@ -92,11 +93,10 @@ public class ReservaDAO {
         PreparedStatement statement = con.prepareStatement(UPDATE_RESERVA);
         statement.setString(1, reserva.getDiaDaReserva());
         statement.setString(2, reserva.getExpiracao());
-        statement.setInt(3,reserva.getDiasReservados());
-        statement.setByte(4,reserva.getServicosAdicionais());
-        statement.setDouble(5,reserva.getDespesasTotais());
-        statement.setInt(6,reserva.getQuarto().getNumero());
-        statement.setInt(7, reserva.getHospede().getId());
+        statement.setByte(3,reserva.getServicosAdicionais());
+        statement.setDouble(4,reserva.getDespesasTotais());
+        statement.setInt(5,reserva.getQuarto().getNumero());
+        statement.setInt(6, reserva.getHospede().getId());
         
         
         statement.execute();

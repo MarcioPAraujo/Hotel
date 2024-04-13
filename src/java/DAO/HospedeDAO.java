@@ -17,7 +17,7 @@ import util.FabricaConexao;
  *
  * @author mariailsa
  */
-public class HospedeDao {
+public class HospedeDAO {
     private static final String getAllHotelguests ="select * from hospede";
     private static final String deleteHotelGuest= "delete from hospede where id = ?";
     private static final String getHotelGuest ="select * from hospede where id = ?";

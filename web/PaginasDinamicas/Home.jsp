@@ -4,6 +4,7 @@
     Author     : mariailsa
 --%>
 
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,17 +13,15 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%
-            User user = new User();
-            user = (User) request.getAtribute("user");
-        %>
-        <h1>Welcome!<%out.print(user.getEmail());%></h1>
+        
+       
+        <h1>Welcome!</h1>
         <img src="" alt="">
         <p>temos X vagas disponiveis</p>
         <form action="tabs">
             <input type="submit" name="menu" class="tab buttons" value="reservas">
             <input type="submit" name="menu" class="tab buttons" value="historico">
-            <input type="submit"class="tab buttons" value="perfil">
+            <input type="submit" name="menu" class="tab buttons" value="perfil">
         </form>
         <!--
         <main>

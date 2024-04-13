@@ -4,24 +4,26 @@
  */
 package controller;
 
-import DAO.HospedeDao;
+import DAO.HospedeDAO;
 import DAO.UserDAO;
+/*
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+*/
 import java.io.IOException;
 import java.io.PrintWriter;
 import model.Hospede;
 import model.User;
-/*
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-*/
+
 
 /**
  *
@@ -55,7 +57,7 @@ public class PrimeiroAcesso extends HttpServlet {
             user.setSenha(request.getParameter("senha"));
             
             
-            HospedeDao hdao = new HospedeDao();
+            HospedeDAO hdao = new HospedeDAO();
             hdao.insertNewHospede(hospede);
             
             hospede = hdao.getHospedeID(hospede);
@@ -65,7 +67,7 @@ public class PrimeiroAcesso extends HttpServlet {
             udao.insertNewUser(user);
             
             request.setAttribute("user", user);
-            request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
+            request.getRequestDispatcher("index.html").forward(request, response);
 
             
         }

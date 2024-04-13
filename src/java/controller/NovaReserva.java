@@ -4,34 +4,26 @@
  */
 package controller;
 
-import DAO.HospedeDAO;
-import DAO.UserDAO;
-/*
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-*/
+import DAO.ReservaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import model.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Hospede;
-
+import model.Agencia;
+import model.Quarto;
+import model.Reserva;
+import model.User;
 
 /**
  *
  * @author mariailsa
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
-    public static User globalUser = new User();
+@WebServlet(name = "adicionar", urlPatterns = {"/adicionar"})
+public class NovaReserva extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,48 +38,66 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
-            // encapsular regra de negócio
-            String message = "";
-            User user = new User();
-            UserDAO udao = new UserDAO();
-            user.setEmail(request.getParameter("mail"));
-            user.setSenha(request.getParameter("senha"));
-            
-            User userFromDataBase = new User();
-            userFromDataBase = udao.getUser(user);
-            
-            if(userFromDataBase.getEmail() == null){
-                message = "dados inválidos";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
-            }else {
-                
-                boolean senhaValida = userFromDataBase.getSenha().equals(user.getSenha());
-                
-                if(senhaValida){
-                //chamar a página home passando hospede
-                    Hospede hospede = new Hospede();
-                    HospedeDAO hdao = new HospedeDAO();
-                    hospede = hdao.getHospede(userFromDataBase.getHospede());
-                    userFromDataBase.setHospede(hospede);
-                    globalUser = userFromDataBase;
+            Login login = new Login();
+            User globalUser = login.globalUser;
 
-                    request.setAttribute("user", globalUser);
-                    request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
-                }
-                else{
-                message = "dados inválidos";
+            ReservaDAO rdao = new ReservaDAO();
+            Reserva reserva = new Reserva();
+            Agencia agencia = new Agencia();
+            Quarto quarto = new Quarto();
+
+            String message = "";
+
+            reserva = rdao.getReserva(globalUser.getHospede());
+            if (reserva.getId() != 0) {
+                message = "você já possui uma reserva";
                 request.setAttribute("message", message);
-                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
+                request.getRequestDispatcher("PaginasDinamicas/Mensagem.jsp").forward(request, response);
+            } else {
+
+                reserva.setDiaDaReserva(request.getParameter("dia_da_reserva"));
+                reserva.setExpiracao(request.getParameter("dia_de_expiracao"));
+                reserva.setServicosAdicionais(Byte.parseByte(request.getParameter("servicos")));
+
+                agencia.setId(Integer.parseInt(request.getParameter("agencia")));
+                quarto.setNumero(Integer.parseInt(request.getParameter("quarto")));
+                reserva.setHospede(globalUser.getHospede());
+                quarto.setClassificacao(request.getParameter("classe"));
+                reserva.setQuarto(quarto);
+                reserva.setAgencia(agencia);
+
+                double despesaTotal = 0;
+                double diaria = 0;
+                if (reserva.getServicosAdicionais() == 1) {
+                    despesaTotal += 100;
                 }
+                switch (reserva.getQuarto().getClassificacao()) {
+                    case "A":
+                        diaria = 200;
+                        despesaTotal += diaria;
+                        break;
+                    case "B":
+                        diaria = 150;
+                        despesaTotal += diaria;
+                        break;
+                    case "C":
+                        diaria = 100;
+                        despesaTotal += diaria;
+                        break;
+                    default:
+                        diaria = 50;
+                        despesaTotal += diaria;
+                }
+
+                reserva.setDiaria(diaria);
+                reserva.setDespesasTotais(despesaTotal);
+
+                rdao.insertNewReserva(reserva);
+
+                request.setAttribute("reserva", reserva);
+                request.getRequestDispatcher("PaginasDinamicas/VerReserva.jsp").forward(request, response);
             }
-                
-                
         }
-           
-            
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -128,5 +138,5 @@ public class Login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-}
 
+}

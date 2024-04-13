@@ -4,20 +4,28 @@
  */
 package controller;
 
+/*
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+*/
+
+import DAO.HistoricoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-/*
+import java.util.ArrayList;
+
+import model.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-*/
+import model.Reserva;
+
 
 /**
  *
@@ -40,14 +48,24 @@ public class MenuHome extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            Login login = new Login();
+            User globalUser = login.globalUser;
             String tab = request.getParameter("menu");
+            
             if(tab.equals("reservas")){
-                
+               
+                request.getRequestDispatcher("PaginasDinamicas/MenuReservas.jsp").forward(request, response);
             }
             if(tab.equals("historico")){
-                
+                HistoricoDAO hdao = new HistoricoDAO();
+                ArrayList<Reserva> historico = new ArrayList<>();
+                historico = hdao.getAllReservas(globalUser.getHospede());
+                request.setAttribute("historico", historico);
+                request.setAttribute("user", globalUser);
+                request.getRequestDispatcher("PaginasDinamicas/Historico.jsp").forward(request, response);
             }
             if(tab.equals("perfil")){
+                request.setAttribute("user", globalUser);
                 request.getRequestDispatcher("PaginasDinamicas/Perfil.jsp").forward(request, response);
             }
         

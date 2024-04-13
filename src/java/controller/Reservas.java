@@ -3,9 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controller;
-
-import DAO.HospedeDAO;
-import DAO.UserDAO;
 /*
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,16 +19,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Hospede;
-
 
 /**
  *
  * @author mariailsa
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
-    public static User globalUser = new User();
+@WebServlet(name = "Reservas", urlPatterns = {"/Reservas"})
+public class Reservas extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,48 +41,11 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            Login login = new Login();
+            User globalUser = login.globalUser;
             
-            // encapsular regra de negócio
-            String message = "";
-            User user = new User();
-            UserDAO udao = new UserDAO();
-            user.setEmail(request.getParameter("mail"));
-            user.setSenha(request.getParameter("senha"));
             
-            User userFromDataBase = new User();
-            userFromDataBase = udao.getUser(user);
-            
-            if(userFromDataBase.getEmail() == null){
-                message = "dados inválidos";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
-            }else {
-                
-                boolean senhaValida = userFromDataBase.getSenha().equals(user.getSenha());
-                
-                if(senhaValida){
-                //chamar a página home passando hospede
-                    Hospede hospede = new Hospede();
-                    HospedeDAO hdao = new HospedeDAO();
-                    hospede = hdao.getHospede(userFromDataBase.getHospede());
-                    userFromDataBase.setHospede(hospede);
-                    globalUser = userFromDataBase;
-
-                    request.setAttribute("user", globalUser);
-                    request.getRequestDispatcher("PaginasDinamicas/Home.jsp").forward(request, response);
-                }
-                else{
-                message = "dados inválidos";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("PaginasDinamicas/ErrorPage.jsp").forward(request, response);
-                }
-            }
-                
-                
         }
-           
-            
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -128,5 +86,5 @@ public class Login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-}
 
+}

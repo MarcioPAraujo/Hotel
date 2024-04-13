@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.Agencia;
 import model.Hospede;
 import model.Quarto;
@@ -21,22 +22,23 @@ import util.FabricaConexao;
 public class HistoricoDAO {
     private static final String ADD_TO_HISTORICO = "insert into historico "
                                                + "(dia_da_reserva, expiracao, dias_reservados, diaria, despesas_totais, servicos_adicionais, hospede, agencia, quarto) "
-                                               + "values(?,?,?,?,?,?,?,?,?,)";
+                                               + "values(?,?,?,?,?,?,?,?,?)";
     // esse comando será executado antes de deleatar uma reserva para adicionar ao historico aquela reserva
-    private static final String GET_RESERVA = "select * from reserva where hospede = ?";
+    private static final String GET_RESERVA = "select * from historico where hospede = ?";
     // pegando a reserva pelo id do hospede, assim listará a reserva antigas daquele hospede especifico
     
     
-    public Reserva getReserva(Hospede hospede){
+    public ArrayList<Reserva> getAllReservas(Hospede hospede){
         Reserva reserva = new Reserva();
         Quarto numeroDoQuarto = new Quarto();
         Agencia agencia = new Agencia();
+        ArrayList<Reserva> historico = new ArrayList<>();
         try {
             Connection con = FabricaConexao.getConexao();
             PreparedStatement statement = con.prepareStatement(GET_RESERVA);
             statement.setInt(1, hospede.getId());
             ResultSet result = statement.executeQuery();
-            if(result.next()){
+            while(result.next()){
               reserva.setId(result.getLong("id"));
               reserva.setDiaDaReserva(result.getString("dia_da_reserva"));
               reserva.setExpiracao(result.getString("expiracao"));
@@ -45,17 +47,21 @@ public class HistoricoDAO {
               reserva.setDespesasTotais(result.getDouble("despesas_totais"));
               numeroDoQuarto.setNumero(result.getInt("quarto"));
               agencia.setId(result.getInt("agencia"));
-              
+              reserva.setQuarto(numeroDoQuarto);
+              reserva.setAgencia(agencia);
+              reserva.setHospede(hospede);
+              historico.add(reserva);
                 
             }
-            reserva.setQuarto(numeroDoQuarto);
-            reserva.setAgencia(agencia);
+            
         con.close();
-        } catch (Exception e) {
+        } catch(ClassNotFoundException | SQLException e){
+             e.getMessage();
+            e.printStackTrace();
         }
         
         
-        return reserva;
+        return historico;
     }
     
     public void insertNewReserva(Reserva reserva){
